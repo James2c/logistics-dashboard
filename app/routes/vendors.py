@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.database import SessionLocal
+from app.core.database import SessionLocal
 from app.models.vendor import Vendor
 from app.schemas.vendor import VendorCreate, VendorResponse
 

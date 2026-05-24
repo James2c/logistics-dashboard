@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.database import SessionLocal
+from app.core.database import SessionLocal
 from app.models.purchase_order import PurchaseOrder
 from app.schemas.purchase_order import (
     PurchaseOrderCreate,
