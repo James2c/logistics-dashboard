@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.database import SessionLocal
 from app.models.vendor import Vendor
+from app.schemas.vendor import VendorCreate, VendorResponse
 
 router = APIRouter()
 
@@ -15,29 +16,26 @@ def get_db():
         db.close()
 
 # Create Vendor
-@router.post("/vendors")
+@router.post("/vendors", response_model=VendorResponse)
 def create_vendor(
-    name: str,
-    email: str,
-    lead_time_days: int,
-    reliability_score: float,
+    vendor: VendorCreate,
     db: Session = Depends(get_db)
 ):
-    vendor = Vendor(
-        name=name,
-        email=email,
-        lead_time_days=lead_time_days,
-        reliability_score=reliability_score
+    new_vendor = Vendor(
+        name=vendor.name,
+        email=vendor.email,
+        lead_time_days=vendor.lead_time_days,
+        reliability_score=vendor.reliability_score
     )
 
-    db.add(vendor)
+    db.add(new_vendor)
     db.commit()
-    db.refresh(vendor)
+    db.refresh(new_vendor)
 
-    return vendor
+    return new_vendor
 
 # Get All Vendors
-@router.get("/vendors")
+@router.get("/vendors", response_model=list[VendorResponse])
 def get_vendors(db: Session = Depends(get_db)):
     vendors = db.query(Vendor).all()
     return vendors
